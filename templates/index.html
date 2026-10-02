@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Mark Calculator</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 6px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            margin-top: 20px;
+            border: none;
+            border-radius: 7px;
+            background: #667eea;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #5568d8;
+        }
+
+        .marks-section {
+            margin-top: 20px;
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            background: #f0fff4;
+            border-left: 5px solid #28a745;
+            border-radius: 8px;
+        }
+
+        .result h2 {
+            color: #198754;
+        }
+
+        .grade {
+            font-size: 22px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🎓 Student Mark Calculator</h1>
+
+    <form method="POST">
+
+        <label for="name">Student Name</label>
+
+        <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Enter your name"
+            required
+        >
+
+        <label for="subjects">Number of Subjects</label>
+
+        <input
+            type="number"
+            id="subjects"
+            name="subjects"
+            min="1"
+            max="20"
+            placeholder="Enter number of subjects"
+            required
+        >
+
+        <div id="marks-container" class="marks-section"></div>
+
+        <button type="submit">
+            Calculate Result
+        </button>
+
+    </form>
+
+
+    {% if result %}
+
+    <div class="result">
+
+        <h2>📊 Result</h2>
+
+        <p>
+            <strong>Student Name:</strong>
+            {{ result.name }}
+        </p>
+
+        <p>
+            <strong>Marks:</strong>
+            {{ result.marks }}
+        </p>
+
+        <p>
+            <strong>Total:</strong>
+            {{ result.total }}
+        </p>
+
+        <p>
+            <strong>Average:</strong>
+            {{ "%.2f"|format(result.average) }}
+        </p>
+
+        <p class="grade">
+            {{ result.grade }}
+        </p>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+<script>
+
+    const subjectsInput = document.getElementById("subjects");
+    const marksContainer = document.getElementById("marks-container");
+
+    subjectsInput.addEventListener("input", function () {
+
+        const numberOfSubjects = parseInt(this.value);
+
+        marksContainer.innerHTML = "";
+
+        if (
+            isNaN(numberOfSubjects) ||
+            numberOfSubjects < 1 ||
+            numberOfSubjects > 20
+        ) {
+            return;
+        }
+
+        for (let i = 0; i < numberOfSubjects; i++) {
+
+            const label = document.createElement("label");
+
+            label.textContent = "Subject " + (i + 1) + " Mark";
+
+            const input = document.createElement("input");
+
+            input.type = "number";
+            input.name = "mark" + i;
+            input.min = "0";
+            input.max = "100";
+            input.required = true;
+
+            marksContainer.appendChild(label);
+            marksContainer.appendChild(input);
+        }
+
+    });
+
+</script>
+
+</body>
+</html>
